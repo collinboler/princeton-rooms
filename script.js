@@ -1,17 +1,66 @@
-import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.min.mjs";
+import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.min.mjs";
+import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs";
 
 // Set the workerSrc to the appropriate URL
 pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.mjs";
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs";
 
 function fadeBanner() {
   let banner = document.getElementById("banner");
-  banner.classList.add("opacity-0"); // Add class to start the fade-out effect
-  setTimeout(function () {
-    banner.remove(); // Remove the element after the transition ends
-  }, 500); // Adjust the timing to match the transition duration
+  if (banner) {
+    banner.classList.add("opacity-0"); // Add class to start the fade-out effect
+    setTimeout(function () {
+      banner.remove(); // Remove the element after the transition ends
+    }, 500); // Adjust the timing to match the transition duration
+  }
 }
 
+function tablulate(rooms) {
+  let table = document.getElementById("output");
+  let html = `
+  <div class="overflow-x-auto">
+    <table class="table table-lg">
+      <thead>
+        <tr>
+          <th>College</th>
+          <th>Building</th>
+          <th>Room #</th>
+          <th>Type</th>
+          <th>Sq.Ft.</th>
+        </tr>
+      </thead>
+      <tbody>`;
+  rooms.forEach((room) => {
+    html += `
+    <tr class="hover">
+      <td>${room.college}</td>
+      <td>${room.building}</td>
+      <td>${room.room}</td>
+      <td>${room.type}</td>
+      <td>${room.sqft}</td>
+    </tr>`;
+  });
+  html += `
+      </tbody>
+    </table>
+  </div>`;
+  table.innerHTML = html;
+}
+
+function search(rooms, query) {
+  const options = {
+    includeScore: true,
+    shouldSort: true,
+    keys: ["last_name", "first_name"],
+  };
+
+  const fuse = new Fuse(rooms, options);
+
+  console.log(fuse.search(searchPattern));
+  return fuse.search(searchPattern);
+}
+
+// Upload file handler
 document
   .getElementById("file-input")
   .addEventListener("change", function (event) {
@@ -69,7 +118,7 @@ document
                 const roomsInPage = pageText
                   .split("|")
                   .filter((item) => item !== "");
-                console.log(roomsInPage);
+                //console.log(roomsInPage);
 
                 let room = {};
                 for (let i = 0; i < roomsInPage.length; i++) {
@@ -78,7 +127,7 @@ document
                     rooms.push(room);
                     room["college"] = roomsInPage[i];
                   } else if (i % 5 === 1) {
-                    room["buliding"] = roomsInPage[i];
+                    room["building"] = roomsInPage[i];
                   } else if (i % 5 === 2) {
                     room["room"] = roomsInPage[i];
                   } else if (i % 5 === 3) {
@@ -90,8 +139,8 @@ document
 
                 roomsInfoList = roomsInfoList.concat(roomsInPage);
 
-                outputDiv.appendChild(pageElement);
-                outputDiv.appendChild(h);
+                //outputDiv.appendChild(pageElement);
+                //outputDiv.appendChild(h);
               });
             }),
           );
@@ -100,8 +149,9 @@ document
         Promise.all(pagesPromises).then(function () {
           console.log("All pages processed");
           roomsInfoList = roomsInfoList;
-          console.log(roomsInfoList);
+          //console.log(roomsInfoList);
           console.log(rooms);
+          tablulate(rooms);
         });
       });
     };
