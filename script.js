@@ -1,9 +1,8 @@
-import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.min.mjs";
 import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs";
 
 // Set the workerSrc to the appropriate URL
 pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.worker.min.mjs";
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs";
 
 function fadeBanner() {
   let banner = document.getElementById("banner");
@@ -14,6 +13,8 @@ function fadeBanner() {
     }, 500); // Adjust the timing to match the transition duration
   }
 }
+
+function divide() {}
 
 function tablulate(rooms) {
   let table = document.getElementById("output");
@@ -47,6 +48,8 @@ function tablulate(rooms) {
   table.innerHTML = html;
 }
 
+function stats() {}
+
 function search(rooms, query) {
   const options = {
     includeScore: true,
@@ -66,26 +69,26 @@ document
   .addEventListener("change", function (event) {
     fadeBanner();
 
-    var file = event.target.files[0];
+    const file = event.target.files[0];
     if (file.type !== "application/pdf") {
       alert("Please upload a PDF file.");
       return;
     }
 
-    var reader = new FileReader();
+    const reader = new FileReader();
 
     reader.onload = function (event) {
-      var typedarray = new Uint8Array(event.target.result);
+      const typedarray = new Uint8Array(event.target.result);
 
       pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
-        var outputDiv = document.getElementById("output");
+        const outputDiv = document.getElementById("output");
         outputDiv.innerHTML = ""; // Clear previous content
 
-        var pagesPromises = [];
+        const pagesPromises = [];
 
-        var roomsInfoList = [];
+        let roomsInfoList = [];
 
-        var rooms = [];
+        const rooms = [];
 
         function noRemove(item) {
           // if not whitespace and isn't 'College' and isn't 'Building' and isn't 'Room' and isn't 'Type' and isn't 'Sq. Ft.' doesn't have 'Updated' and doesn't have
@@ -103,16 +106,15 @@ document
           );
         }
 
-        for (var pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
           pagesPromises.push(
             pdf.getPage(pageNum).then(function (page) {
               return page.getTextContent().then(function (textContent) {
-                var pageText = textContent.items
+                const pageText = textContent.items
                   .filter(noRemove)
                   .map((item) => item.str)
                   .join("|");
-                var pageElement = document.createElement("div");
-                var h = document.createElement("hr");
+                const pageElement = document.createElement("div");
                 pageElement.textContent = pageText;
 
                 const roomsInPage = pageText
@@ -151,7 +153,9 @@ document
           roomsInfoList = roomsInfoList;
           //console.log(roomsInfoList);
           console.log(rooms);
+          divide();
           tablulate(rooms);
+          //stats(rooms);
         });
       });
     };
