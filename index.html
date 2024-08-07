@@ -1,4 +1,6 @@
 <!doctype html>
+
+<!-- theme toggling -->
 <html
   x-data="{ theme: (localStorage.getItem('darkMode') === 'true') ? 'dark' : 'light' }"
   x-init="$watch('theme', val => localStorage.setItem('darkMode', val === 'dark'))"
@@ -9,28 +11,21 @@
     <meta name="viewport" content="width=device-width" />
     <title>Princeton Available Rooms</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-    ></script>
-
-    <script
-      type="module"
-      src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.mjs"
-    ></script>
   </head>
 
   <body class="flex flex-col min-h-screen">
     <header>
       <div class="navbar bg-base-100">
         <div class="navbar-start"></div>
+
         <div class="navbar-center">
-          <a class="btn btn-ghost text-xl font-mono"
-            >Princeton Available Rooms</a
-          >
+          <a class="btn btn-ghost text-xl font-mono">
+            Princeton Available Rooms
+          </a>
         </div>
+
+        <!-- theme toggle -->
         <div class="navbar-end">
-          <!-- theme toggle -->
           <label class="swap swap-rotate">
             <!-- this hidden checkbox controls the state -->
             <input
@@ -87,6 +82,7 @@
       </div>
     </header>
 
+    <!-- file upload + results view -->
     <main class="flex-grow flex-col flex items-center justify-evenly">
       <p
         id="banner"
@@ -107,12 +103,19 @@
       <div id="output"></div>
     </main>
 
+    <!-- footer -->
     <footer class="footer footer-center p-4 bg-base-100 text-base-content">
       <aside>
         <p class="font-mono"><a href="https://github.com/BlazerYoo">BYOO</a></p>
       </aside>
     </footer>
 
+    <!-- load libraries + main script -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script
+      type="module"
+      src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.mjs"
+    ></script>
     <script type="module" src="script.js"></script>
   </body>
 </html>

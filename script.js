@@ -1,53 +1,18 @@
-import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs";
-
-// Set the workerSrc to the appropriate URL
+// set the worker
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs";
 
 function fadeBanner() {
   let banner = document.getElementById("banner");
   if (banner) {
-    banner.classList.add("opacity-0"); // Add class to start the fade-out effect
+    banner.classList.add("opacity-0");
     setTimeout(function () {
-      banner.remove(); // Remove the element after the transition ends
-    }, 500); // Adjust the timing to match the transition duration
+      banner.remove();
+    }, 500);
   }
 }
 
 function divide() {}
-
-function tablulate(rooms) {
-  let table = document.getElementById("output");
-  let html = `
-  <div class="overflow-x-auto">
-    <table class="table table-lg">
-      <thead>
-        <tr>
-          <th>College</th>
-          <th>Building</th>
-          <th>Room #</th>
-          <th>Type</th>
-          <th>Sq.Ft.</th>
-        </tr>
-      </thead>
-      <tbody>`;
-  rooms.forEach((room) => {
-    html += `
-    <tr class="hover">
-      <td>${room.college}</td>
-      <td>${room.building}</td>
-      <td>${room.room}</td>
-      <td>${room.type}</td>
-      <td>${room.sqft}</td>
-    </tr>`;
-  });
-  html += `
-      </tbody>
-    </table>
-  </div>`;
-  table.innerHTML = html;
-}
-
 function stats() {}
 
 function search(rooms, query) {
@@ -63,35 +28,49 @@ function search(rooms, query) {
   return fuse.search(searchPattern);
 }
 
-// Upload file handler
+// upload file handler
 document
   .getElementById("file-input")
   .addEventListener("change", function (event) {
     fadeBanner();
 
+    // get file
     const file = event.target.files[0];
     if (file.type !== "application/pdf") {
       alert("Please upload a PDF file.");
       return;
     }
 
+    // new file reader
     const reader = new FileReader();
 
+    // when file successfully read
     reader.onload = function (event) {
+      // store raw binary data of file
       const typedarray = new Uint8Array(event.target.result);
 
+      // get pdf from raw binary data
       pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
+        // clear output
         const outputDiv = document.getElementById("output");
-        outputDiv.innerHTML = ""; // Clear previous content
+        outputDiv.innerHTML = "";
 
+        // initializes array to hold promises for each page
         const pagesPromises = [];
 
+        // extract room + room infos
+        const rooms = [];
         let roomsInfoList = [];
 
-        const rooms = [];
-
+        // don't remove if
+        // not whitespace and not any of following:
+        // 'College'
+        // 'Building'
+        // 'Room'
+        // 'Type'
+        // 'Sq. Ft.'
+        // 'Updated'
         function noRemove(item) {
-          // if not whitespace and isn't 'College' and isn't 'Building' and isn't 'Room' and isn't 'Type' and isn't 'Sq. Ft.' doesn't have 'Updated' and doesn't have
           return (
             !/^\s*$/.test(item.str) &&
             item.str !== "College" &&
@@ -106,22 +85,20 @@ document
           );
         }
 
+        // iterate through each page
         for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+          // keep track of promises for each page (when each page gets retrieved)
           pagesPromises.push(
             pdf.getPage(pageNum).then(function (page) {
+              // get text content of each page
               return page.getTextContent().then(function (textContent) {
-                const pageText = textContent.items
+                // extract relevant room info
+                const roomsInPage = textContent.items
                   .filter(noRemove)
                   .map((item) => item.str)
-                  .join("|");
-                const pageElement = document.createElement("div");
-                pageElement.textContent = pageText;
-
-                const roomsInPage = pageText
-                  .split("|")
                   .filter((item) => item !== "");
-                //console.log(roomsInPage);
 
+                // organize room info
                 let room = {};
                 for (let i = 0; i < roomsInPage.length; i++) {
                   if (i % 5 === 0) {
@@ -138,27 +115,55 @@ document
                     room["sqft"] = roomsInPage[i];
                   }
                 }
-
                 roomsInfoList = roomsInfoList.concat(roomsInPage);
-
-                //outputDiv.appendChild(pageElement);
-                //outputDiv.appendChild(h);
               });
             }),
           );
         }
 
+        // display room info as table
+        function tablulate(rooms) {
+          let table = document.getElementById("output");
+          let html = `
+          <div class="overflow-x-auto">
+            <table class="table table-lg">
+              <thead>
+                <tr>
+                  <th>College</th>
+                  <th>Building</th>
+                  <th>Room #</th>
+                  <th>Type</th>
+                  <th>Sq.Ft.</th>
+                </tr>
+              </thead>
+              <tbody>`;
+          rooms.forEach((room) => {
+            html += `
+            <tr class="hover">
+              <td>${room.college}</td>
+              <td>${room.building}</td>
+              <td>${room.room}</td>
+              <td>${room.type}</td>
+              <td>${room.sqft}</td>
+            </tr>`;
+          });
+          html += `
+              </tbody>
+            </table>
+          </div>`;
+          table.innerHTML = html;
+        }
+
+        // when all pages processed
         Promise.all(pagesPromises).then(function () {
           console.log("All pages processed");
-          roomsInfoList = roomsInfoList;
-          //console.log(roomsInfoList);
           console.log(rooms);
-          divide();
           tablulate(rooms);
           //stats(rooms);
         });
       });
     };
 
+    // read file to trigger load even when read complete
     reader.readAsArrayBuffer(file);
   });
