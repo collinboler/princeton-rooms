@@ -1,45 +1,26 @@
+// hide output initially output initially
+document.getElementById("output").style.display = "none";
+
 // set the worker
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs";
-
-function fadeBanner() {
-  let banner = document.getElementById("banner");
-  if (banner) {
-    banner.classList.add("opacity-0");
-    setTimeout(function () {
-      banner.remove();
-    }, 500);
-  }
-}
-
-function divide() {}
-function stats() {}
-
-function search(rooms, query) {
-  const options = {
-    includeScore: true,
-    shouldSort: true,
-    keys: ["last_name", "first_name"],
-  };
-
-  const fuse = new Fuse(rooms, options);
-
-  console.log(fuse.search(searchPattern));
-  return fuse.search(searchPattern);
-}
 
 // upload file handler
 document
   .getElementById("file-input")
   .addEventListener("change", function (event) {
-    fadeBanner();
-
     // get file
     const file = event.target.files[0];
+
+    // verify that file is pdf
     if (file.type !== "application/pdf") {
       alert("Please upload a PDF file.");
       return;
     }
+
+    // clear output
+    clearTableOutput();
+    clearStatsOutput();
 
     // new file reader
     const reader = new FileReader();
@@ -51,10 +32,6 @@ document
 
       // get pdf from raw binary data
       pdfjsLib.getDocument(typedarray).promise.then(function (pdf) {
-        // clear output
-        const outputDiv = document.getElementById("output");
-        outputDiv.innerHTML = "";
-
         // initializes array to hold promises for each page
         const pagesPromises = [];
 
@@ -121,45 +98,15 @@ document
           );
         }
 
-        // display room info as table
-        function tablulate(rooms) {
-          let table = document.getElementById("output");
-          let html = `
-          <div class="overflow-x-auto">
-            <table class="table table-lg">
-              <thead>
-                <tr>
-                  <th>College</th>
-                  <th>Building</th>
-                  <th>Room #</th>
-                  <th>Type</th>
-                  <th>Sq.Ft.</th>
-                </tr>
-              </thead>
-              <tbody>`;
-          rooms.forEach((room) => {
-            html += `
-            <tr class="hover">
-              <td>${room.college}</td>
-              <td>${room.building}</td>
-              <td>${room.room}</td>
-              <td>${room.type}</td>
-              <td>${room.sqft}</td>
-            </tr>`;
-          });
-          html += `
-              </tbody>
-            </table>
-          </div>`;
-          table.innerHTML = html;
-        }
-
         // when all pages processed
         Promise.all(pagesPromises).then(function () {
           console.log("All pages processed");
           console.log(rooms);
+          fadeBanner();
+          removeSpacing();
           tablulate(rooms);
-          //stats(rooms);
+          stats(rooms);
+          showOutput();
         });
       });
     };

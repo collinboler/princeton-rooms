@@ -16,3 +16,7 @@ html {
   opacity: 0;
   /* Set opacity to 0 for fade-out effect */
 }
+
+.card {
+  height: 80vh;
+}
