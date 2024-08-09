@@ -27,10 +27,16 @@ function Frequency(rooms, category) {
 // generate charts
 function stats(rooms) {
   document.getElementById("stats-div").innerHTML =
-    `<canvas id="college-chart"></canvas>
-    <canvas id="building-chart"></canvas>
-    <canvas id="type-chart"></canvas>
-    <canvas id="sqft-cjart"></canvas>`;
+    `<div class="chart-container"><p class="text-xl font-semibold chart-title">Colleges</p><canvas id="college-chart"></canvas></div>
+    <br />
+    <br />
+    <div class="chart-container"><p class="text-xl font-semibold chart-title">Buildings</p><canvas id="building-chart"></canvas></div>
+    <br />
+    <br />
+    <div class="chart-container"><p class="text-xl font-semibold chart-title">Room Types</p><canvas id="type-chart"></canvas></div>
+    <br />
+    <br />
+    <div class="chart-container"><p class="text-xl font-semibold chart-title">Sq. Ft.</p><canvas id="sqft-cjart"></canvas></div>`;
 
   const collegeFrequency = extractFrequency(rooms, "college");
   const buildingFrequency = extractFrequency(rooms, "building");
@@ -55,6 +61,18 @@ function stats(rooms) {
         },
       ],
     },
+    options: {
+      layout: {
+        padding: 0,
+      },
+      plugins: {
+        legend: {
+          labels: {
+            padding: 3,
+          },
+        },
+      },
+    },
   });
 
   const ctxBuilding = document.getElementById("building-chart");
@@ -64,10 +82,22 @@ function stats(rooms) {
       labels: Object.keys(buildingFrequency),
       datasets: [
         {
-          label: "Buildings",
+          label: "Colleges",
           data: Object.values(buildingFrequency),
         },
       ],
+    },
+    options: {
+      layout: {
+        padding: 0,
+      },
+      plugins: {
+        legend: {
+          labels: {
+            padding: 3,
+          },
+        },
+      },
     },
   });
 
@@ -82,6 +112,18 @@ function stats(rooms) {
           data: Object.values(typeFrequency),
         },
       ],
+    },
+    options: {
+      layout: {
+        padding: 0,
+      },
+      plugins: {
+        legend: {
+          labels: {
+            padding: 3,
+          },
+        },
+      },
     },
   });
 }

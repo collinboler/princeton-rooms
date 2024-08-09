@@ -17,6 +17,18 @@ html {
   /* Set opacity to 0 for fade-out effect */
 }
 
-.card {
+.outer-card {
   height: 80vh;
+}
+
+#search-stats-div {
+  height: 100%;
+}
+
+.chart-title {
+  text-align: center;
+}
+
+.chart-container {
+  width: 35vw;
 }
