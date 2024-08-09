@@ -1,6 +1,11 @@
+import Alpine from "https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/+esm";
 import { parseFile } from "./file-parse.js";
 import { stats } from "./chart-gen.js";
 import { search } from "./search.js";
+
+window.Alpine = Alpine;
+
+Alpine.start();
 
 // show dialog
 dialog();
