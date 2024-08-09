@@ -1,9 +1,3 @@
-// clear output
-function clearStatsOutput() {
-  const stats = document.getElementById("stats-div");
-  stats.innerHTML = `<span class="loading loading-infinity loading-lg text-warning"></span>`;
-}
-
 // find variable frequencies
 function extractFrequency(rooms, category) {
   const frequency = rooms.reduce((acc, curr) => {
@@ -15,7 +9,7 @@ function extractFrequency(rooms, category) {
 }
 
 // find sqft bin frequencies
-function Frequency(rooms, category) {
+function sqftFrequency(rooms, category) {
   const frequency = rooms.reduce((acc, curr) => {
     acc[curr[category]] = (acc[curr[category]] || 0) + 1;
     return acc;
@@ -27,16 +21,16 @@ function Frequency(rooms, category) {
 // generate charts
 function stats(rooms) {
   document.getElementById("stats-div").innerHTML =
-    `<div class="chart-container"><p class="text-xl font-semibold chart-title">Colleges</p><canvas id="college-chart"></canvas></div>
+    `<div class="chart-container"><p class="text-xl font-semibold font-mono text-center">Colleges</p><canvas id="college-chart"></canvas></div>
     <br />
     <br />
-    <div class="chart-container"><p class="text-xl font-semibold chart-title">Buildings</p><canvas id="building-chart"></canvas></div>
+    <div class="chart-container"><p class="text-xl font-semibold font-mono text-center">Buildings</p><canvas id="building-chart"></canvas></div>
     <br />
     <br />
-    <div class="chart-container"><p class="text-xl font-semibold chart-title">Room Types</p><canvas id="type-chart"></canvas></div>
+    <div class="chart-container"><p class="text-xl font-semibold font-mono text-center">Room Types</p><canvas id="type-chart"></canvas></div>
     <br />
     <br />
-    <div class="chart-container"><p class="text-xl font-semibold chart-title">Sq. Ft.</p><canvas id="sqft-cjart"></canvas></div>`;
+    <div class="chart-container"><p class="text-xl font-semibold font-mono text-center">Sq. Ft.</p><canvas id="sqft-cjart"></canvas></div>`;
 
   const collegeFrequency = extractFrequency(rooms, "college");
   const buildingFrequency = extractFrequency(rooms, "building");

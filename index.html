@@ -14,6 +14,20 @@
   </head>
 
   <body class="flex flex-col min-h-screen">
+    <dialog open>
+      <p class="font-mono">
+        Upload the latest Available Room List pdf.
+        <br />
+        Then click on the left table column titles to sort.
+        <br />
+        Search on the right to filter.
+      </p>
+      <br />
+      <form class="text-center" method="dialog">
+        <button class="font-mono">Ok</button>
+      </form>
+    </dialog>
+
     <header>
       <div class="navbar bg-base-100">
         <div class="navbar-start"></div>
@@ -116,8 +130,16 @@
             class="flex w-full flex-col border-opacity-50"
           >
             <div class="card rounded-box grid h-20 place-items-center">
+              <div class="label">
+                <span class="label-text">Search to filter</span>
+              </div>
               <label class="input input-bordered flex items-center gap-2">
-                <input type="text" class="grow" placeholder="Search" />
+                <input
+                  id="search-query"
+                  type="text"
+                  class="grow"
+                  placeholder="Search"
+                />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 16 16"
@@ -160,9 +182,12 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.mjs"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="looks.js"></script>
+    <script type="module" src="file-parse.js"></script>
     <script src="table-gen.js"></script>
+    <script src="sort.js"></script>
     <script src="chart-gen.js"></script>
-    <script src="search.js"></script>
+    <script type="module" src="search.js"></script>
     <script type="module" src="script.js"></script>
   </body>
 </html>

@@ -1562,6 +1562,20 @@ html {
   --tw-text-opacity: 0.2;
 }
 
+.label-text {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-text-opacity: 1;
+  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
+}
+
+.label-text-alt {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  --tw-text-opacity: 1;
+  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
+}
+
 .input input {
   --tw-bg-opacity: 1;
   background-color: var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity)));
@@ -2159,6 +2173,13 @@ html {
   width: 100%;
 }
 
+dialog {
+  margin-top: 40vh;
+  border: solid black;
+  border-radius: 12px;
+  padding: 10px;
+}
+
 .will-fade {
   transition: opacity 0.5s ease;
   /* Apply transition for opacity */
@@ -2175,10 +2196,6 @@ html {
 
 #search-stats-div {
   height: 100%;
-}
-
-.chart-title {
-  text-align: center;
 }
 
 .chart-container {

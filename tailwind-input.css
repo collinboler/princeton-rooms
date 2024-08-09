@@ -7,6 +7,13 @@ html {
   width: 100%;
 }
 
+dialog {
+  margin-top: 40vh;
+  border: solid black;
+  border-radius: 12px;
+  padding: 10px;
+}
+
 .will-fade {
   transition: opacity 0.5s ease;
   /* Apply transition for opacity */
@@ -23,10 +30,6 @@ html {
 
 #search-stats-div {
   height: 100%;
-}
-
-.chart-title {
-  text-align: center;
 }
 
 .chart-container {
