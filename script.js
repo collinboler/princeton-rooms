@@ -26,7 +26,7 @@ document
       });
   });
 
-// handle filter search queries
+// handle filter search queries on input
 document.getElementById("search-query").addEventListener("input", (event) => {
   console.log(event.target.value);
   // clear output
@@ -41,5 +41,26 @@ document.getElementById("search-query").addEventListener("input", (event) => {
     const results = search(globalRooms, event.target.value);
     tablulate(results);
     stats(results);
+  }
+});
+
+// handle filter search queries on enter
+document.getElementById("search-query").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    const query = document.getElementById("search-query").value;
+    console.log(query);
+    // clear output
+    clearTableOutput();
+    clearStatsOutput();
+
+    // show all rooms when empty query
+    if (query === "") {
+      tablulate(globalRooms);
+      stats(globalRooms);
+    } else {
+      const results = search(globalRooms, query);
+      tablulate(results);
+      stats(results);
+    }
   }
 });
