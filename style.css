@@ -1569,13 +1569,6 @@ html {
   color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
 }
 
-.label-text-alt {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  --tw-text-opacity: 1;
-  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
-}
-
 .input input {
   --tw-bg-opacity: 1;
   background-color: var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity)));
@@ -2194,8 +2187,17 @@ dialog {
   height: 80vh;
 }
 
+#outer-search-stats-div {
+  display: flex;
+}
+
 #search-stats-div {
   height: 100%;
+}
+
+#stats-div {
+  height: 100%;
+  flex: 1;
 }
 
 .chart-container {
