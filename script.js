@@ -1,4 +1,5 @@
 import { parseFile } from "./file-parse.js";
+import { stats } from "./chart-gen.js";
 import { search } from "./search.js";
 
 // show dialog

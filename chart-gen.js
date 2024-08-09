@@ -1,3 +1,11 @@
+import {
+  Chart,
+  registerables,
+} from "https://cdn.jsdelivr.net/npm/chart.js@4.4.3/+esm";
+
+// Register the components
+Chart.register(...registerables);
+
 // find variable frequencies
 function extractFrequency(rooms, category) {
   const frequency = rooms.reduce((acc, curr) => {
@@ -19,7 +27,7 @@ function sqftFrequency(rooms, category) {
 }
 
 // generate charts
-function stats(rooms) {
+export function stats(rooms) {
   document.getElementById("stats-div").innerHTML =
     `<div class="chart-container"><p class="text-xl font-semibold font-mono text-center">Colleges</p><canvas id="college-chart"></canvas></div>
     <br />

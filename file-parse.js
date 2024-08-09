@@ -1,9 +1,11 @@
+import pdfjsDist from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/+esm";
+
 // upload file handler
 export function parseFile(event) {
   return new Promise((resolve, reject) => {
     // set the worker
     pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs";
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.worker.min.mjs";
 
     // get file
     const file = event.target.files[0];
