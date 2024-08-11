@@ -54,7 +54,6 @@ function extractFrequency(rooms, category) {
 function sqftFrequency(rooms) {
   const sqftArr = rooms.map((room) => parseFloat(room.sqft));
 
-  console.log(sqftArr);
   // create bins
   const minSqft = Math.min(...sqftArr);
   const maxSqft = Math.max(...sqftArr);
@@ -109,63 +108,28 @@ export function stats(rooms) {
   console.log(binFrequency);
   console.log(Object.values(binFrequency).reduce((a, b) => a + b, 0));
 
-  const ctxCollege = document.getElementById("college-chart");
-  new Chart(ctxCollege, {
-    type: "pie",
-    data: {
-      labels: Object.keys(collegeFrequency),
-      datasets: [
-        {
-          label: "Frequency",
-          data: Object.values(collegeFrequency),
-        },
-      ],
-    },
-    options: pieChartOptions,
-  });
+  const chartsInfo = {
+    college: ["pie", collegeFrequency, pieChartOptions],
+    building: ["pie", buildingFrequency, pieChartOptions],
+    type: ["pie", typeFrequency, pieChartOptions],
+    sqft: ["bar", binFrequency, barChartOptions],
+  };
 
-  const ctxBuilding = document.getElementById("building-chart");
-  new Chart(ctxBuilding, {
-    type: "pie",
-    data: {
-      labels: Object.keys(buildingFrequency),
-      datasets: [
-        {
-          label: "Frequency",
-          data: Object.values(buildingFrequency),
-        },
-      ],
-    },
-    options: pieChartOptions,
-  });
-
-  const ctxType = document.getElementById("type-chart");
-  new Chart(ctxType, {
-    type: "pie",
-    data: {
-      labels: Object.keys(typeFrequency),
-      datasets: [
-        {
-          label: "Frequency",
-          data: Object.values(typeFrequency),
-        },
-      ],
-    },
-    options: pieChartOptions,
-  });
-
-  const ctxSqft = document.getElementById("sqft-chart");
-  new Chart(ctxSqft, {
-    type: "bar",
-    data: {
-      labels: Object.keys(binFrequency),
-      datasets: [
-        {
-          label: "Frequency",
-          data: Object.values(binFrequency),
-        },
-      ],
-    },
-    options: barChartOptions,
+  const charts = document.getElementsByTagName("canvas");
+  Array.from(charts).forEach((ctx) => {
+    const chartKey = ctx.id.split("-")[0];
+    new Chart(ctx, {
+      type: chartsInfo[chartKey][0],
+      data: {
+        labels: Object.keys(chartsInfo[chartKey][1]),
+        datasets: [
+          {
+            label: "Frequency",
+            data: Object.values(chartsInfo[chartKey][1]),
+          },
+        ],
+      },
+      options: chartsInfo[chartKey][2],
+    });
   });
 }
