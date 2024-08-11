@@ -3,8 +3,42 @@ import {
   registerables,
 } from "https://cdn.jsdelivr.net/npm/chart.js@4.4.3/+esm";
 
-// Register the components
+// register components
 Chart.register(...registerables);
+
+const pieChartOptions = {
+  layout: {
+    padding: 0,
+  },
+  plugins: {
+    legend: {
+      labels: {
+        padding: 3,
+      },
+    },
+  },
+  scales: {
+    x: {
+      display: false,
+    },
+    y: {
+      display: false,
+    },
+  },
+};
+
+const barChartOptions = {
+  layout: {
+    padding: 0,
+  },
+  plugins: {
+    legend: {
+      labels: {
+        padding: 3,
+      },
+    },
+  },
+};
 
 // find variable frequencies
 function extractFrequency(rooms, category) {
@@ -17,13 +51,34 @@ function extractFrequency(rooms, category) {
 }
 
 // find sqft bin frequencies
-function sqftFrequency(rooms, category) {
-  const frequency = rooms.reduce((acc, curr) => {
-    acc[curr[category]] = (acc[curr[category]] || 0) + 1;
-    return acc;
-  }, {});
+function sqftFrequency(rooms) {
+  const sqftArr = rooms.map((room) => parseFloat(room.sqft));
 
-  return frequency;
+  console.log(sqftArr);
+  // create bins
+  const minSqft = Math.min(...sqftArr);
+  const maxSqft = Math.max(...sqftArr);
+  const binWidth = 50;
+
+  const lowerBound = Math.floor(minSqft / binWidth) * binWidth;
+  const upperBound = Math.floor(maxSqft / binWidth) * binWidth;
+
+  console.log(
+    `min: ${minSqft} - max: ${maxSqft} - lowerBound: ${lowerBound} - upperBound: ${upperBound}`,
+  );
+
+  const bins = {};
+
+  for (let i = lowerBound; i <= upperBound; i += binWidth) {
+    bins[`${i} - ${i + binWidth - 1}`] = 0;
+  }
+
+  sqftArr.forEach((item) => {
+    const bin = Math.floor(item / binWidth) * binWidth;
+    bins[`${bin} - ${bin + binWidth - 1}`] += 1;
+  });
+
+  return bins;
 }
 
 // generate charts
@@ -38,11 +93,12 @@ export function stats(rooms) {
     <div class="chart-container"><p class="text-xl font-semibold font-mono text-center">Room Types</p><canvas id="type-chart"></canvas></div>
     <br />
     <br />
-    <div class="chart-container"><p class="text-xl font-semibold font-mono text-center">Sq. Ft.</p><canvas id="sqft-cjart"></canvas></div>`;
+    <div class="chart-container"><p class="text-xl font-semibold font-mono text-center">Sq. Ft.</p><canvas id="sqft-chart"></canvas></div>`;
 
   const collegeFrequency = extractFrequency(rooms, "college");
   const buildingFrequency = extractFrequency(rooms, "building");
   const typeFrequency = extractFrequency(rooms, "type");
+  const binFrequency = sqftFrequency(rooms);
 
   console.log(collegeFrequency);
   console.log(Object.values(collegeFrequency).reduce((a, b) => a + b, 0));
@@ -50,6 +106,8 @@ export function stats(rooms) {
   console.log(Object.values(buildingFrequency).reduce((a, b) => a + b, 0));
   console.log(typeFrequency);
   console.log(Object.values(typeFrequency).reduce((a, b) => a + b, 0));
+  console.log(binFrequency);
+  console.log(Object.values(binFrequency).reduce((a, b) => a + b, 0));
 
   const ctxCollege = document.getElementById("college-chart");
   new Chart(ctxCollege, {
@@ -58,23 +116,12 @@ export function stats(rooms) {
       labels: Object.keys(collegeFrequency),
       datasets: [
         {
-          label: "Colleges",
+          label: "Frequency",
           data: Object.values(collegeFrequency),
         },
       ],
     },
-    options: {
-      layout: {
-        padding: 0,
-      },
-      plugins: {
-        legend: {
-          labels: {
-            padding: 3,
-          },
-        },
-      },
-    },
+    options: pieChartOptions,
   });
 
   const ctxBuilding = document.getElementById("building-chart");
@@ -84,23 +131,12 @@ export function stats(rooms) {
       labels: Object.keys(buildingFrequency),
       datasets: [
         {
-          label: "Colleges",
+          label: "Frequency",
           data: Object.values(buildingFrequency),
         },
       ],
     },
-    options: {
-      layout: {
-        padding: 0,
-      },
-      plugins: {
-        legend: {
-          labels: {
-            padding: 3,
-          },
-        },
-      },
-    },
+    options: pieChartOptions,
   });
 
   const ctxType = document.getElementById("type-chart");
@@ -110,22 +146,26 @@ export function stats(rooms) {
       labels: Object.keys(typeFrequency),
       datasets: [
         {
-          label: "Room Type",
+          label: "Frequency",
           data: Object.values(typeFrequency),
         },
       ],
     },
-    options: {
-      layout: {
-        padding: 0,
-      },
-      plugins: {
-        legend: {
-          labels: {
-            padding: 3,
-          },
+    options: pieChartOptions,
+  });
+
+  const ctxSqft = document.getElementById("sqft-chart");
+  new Chart(ctxSqft, {
+    type: "bar",
+    data: {
+      labels: Object.keys(binFrequency),
+      datasets: [
+        {
+          label: "Frequency",
+          data: Object.values(binFrequency),
         },
-      },
+      ],
     },
+    options: barChartOptions,
   });
 }
