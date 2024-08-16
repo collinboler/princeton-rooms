@@ -1,7 +1,16 @@
 import Alpine from "https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/+esm";
+import {
+  dialog,
+  fadeBanner,
+  clearTableOutput,
+  clearStatsOutput,
+  removeSpacing,
+  showOutput,
+} from "./looks.js";
 import { parseFile } from "./file-parse.js";
 import { stats } from "./chart-gen.js";
 import { search } from "./search.js";
+import { tablulate } from "./table-gen.js";
 
 window.Alpine = Alpine;
 

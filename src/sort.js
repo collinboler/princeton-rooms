@@ -1,3 +1,6 @@
+import { clearTableOutput } from "./looks.js";
+import { sorted, tablulate } from "./table-gen.js";
+
 // higher-order function to create a comparison function
 function createCompareFunction(category, reverse) {
   return function (a, b) {
@@ -29,7 +32,7 @@ function sortTable(rooms, category, sorted) {
   tablulate(rooms);
 }
 
-function addSortFunction(rooms) {
+export function addSortFunction(rooms) {
   // add sort capability on click
   const tableHeadings = document.getElementsByTagName("th");
 

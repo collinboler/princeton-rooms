@@ -1,4 +1,4 @@
-import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs";
+import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/+esm";
 
 const options = {
   includeScore: true,

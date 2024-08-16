@@ -1,4 +1,5 @@
 import pdfjsDist from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/+esm";
+import { clearTableOutput, clearStatsOutput } from "./looks.js";
 
 // upload file handler
 export function parseFile(event) {
