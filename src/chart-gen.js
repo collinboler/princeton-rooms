@@ -1,10 +1,4 @@
-import {
-  Chart,
-  registerables,
-} from "https://cdn.jsdelivr.net/npm/chart.js@4.4.3/+esm";
-
-// register components
-Chart.register(...registerables);
+import Chart from "chart.js/auto";
 
 const pieChartOptions = {
   layout: {

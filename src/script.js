@@ -1,4 +1,4 @@
-import Alpine from "https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/+esm";
+import Alpine from "alpinejs";
 import {
   dialog,
   fadeBanner,
