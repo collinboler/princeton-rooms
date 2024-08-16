@@ -2,9 +2,10 @@
   "name": "princeton-rooms",
   "version": "1.0.0",
   "description": "Easily search for and sort through available rooms",
-  "main": "tailwind.config.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
