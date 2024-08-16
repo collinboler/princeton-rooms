@@ -1,8 +1,5 @@
 import { addSortFunction } from "./sort.js";
 
-// allow for sorting reverse
-export let sorted = false;
-
 // display room info as table
 export function tablulate(rooms) {
   document.getElementById("table-div").innerHTML = `<div id="table"></div>`;

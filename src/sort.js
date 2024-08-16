@@ -1,5 +1,8 @@
 import { clearTableOutput } from "./looks.js";
-import { sorted, tablulate } from "./table-gen.js";
+import { tablulate } from "./table-gen.js";
+
+// allow for sorting reverse
+let sorted = false;
 
 // higher-order function to create a comparison function
 function createCompareFunction(category, reverse) {
