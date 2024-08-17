@@ -1,12 +1,11 @@
 import pdfjsDist from "pdfjs-dist";
-import pdfjsWorker from "pdfjs-dist/build/pdf.worker.min.mjs"; 
 import { clearTableOutput, clearStatsOutput } from "./looks.js";
 
 // upload file handler
 export function parseFile(event) {
   return new Promise((resolve, reject) => {
     // set the worker
-    pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdf.worker.min.mjs";
 
     // get file
     const file = event.target.files[0];
