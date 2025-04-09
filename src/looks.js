@@ -31,8 +31,15 @@ export function fadeBanner() {
 
 // clear output
 export function clearTableOutput() {
-  const table = document.getElementById("table-div");
-  table.innerHTML = `<span class="loading loading-infinity loading-lg text-warning"></span>`;
+  // Create table container if it doesn't exist
+  if (!document.getElementById("table-container")) {
+    const tableContainer = document.createElement("div");
+    tableContainer.id = "table-container";
+    document.getElementById("table-div").appendChild(tableContainer);
+  }
+  
+  const tableContainer = document.getElementById("table-container");
+  tableContainer.innerHTML = `<span class="loading loading-infinity loading-lg text-warning"></span>`;
 }
 
 // clear output

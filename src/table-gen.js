@@ -2,7 +2,19 @@ import { addSortFunction } from "./sort.js";
 
 // display room info as table
 export function tablulate(rooms) {
-  document.getElementById("table-div").innerHTML = `<div id="table"></div>`;
+  // Get the filter controls before overwriting them
+  const filterControls = document.getElementById("filter-controls");
+  
+  // Create a div to hold the table if it doesn't exist
+  if (!document.getElementById("table-container")) {
+    const tableContainer = document.createElement("div");
+    tableContainer.id = "table-container";
+    document.getElementById("table-div").appendChild(tableContainer);
+  }
+  
+  // Target the table container instead of the whole table-div
+  const tableContainer = document.getElementById("table-container");
+  tableContainer.innerHTML = `<div id="table"></div>`;
 
   let table = document.getElementById("table");
   let html = `
